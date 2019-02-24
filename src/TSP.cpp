@@ -14,6 +14,7 @@
 #include <limits.h>
 
 using namespace std;
+
 int final_cost = 0, vertices, max_value = INT_MAX, visited_all_node_value = 0,
 		first_node_val = 0, first_visited_count = 1, output_Vector_Size_Count =
 				0;
@@ -21,22 +22,26 @@ std::string outPut;
 std::vector<std::vector<int> > graphVector;
 std::vector<int> output_vector;
 
-//this method will convert string to Integer
-int stringToInt(string strInput) {
+//this method will convert string to Integer.
+int stringToInt(string strInput){
 
-	stringstream strToInt(strInput);
-	int intValue = 0;
-	strToInt >> intValue;
+		stringstream strToInt(strInput);
+	    int intValue = 0;
+	    strToInt >> intValue;
 
-	return intValue;
+	    return intValue;
 
 }
+
 //this method will converting vector array from String
 vector<int> splitStringToIntegerArray(string file_line) {
+
 	vector<int> result_vector;
+
 	std::istringstream iss(file_line);
 	for (std::string line; iss >> line;)
 		result_vector.push_back(stringToInt(line));
+
 	return result_vector;
 }
 
@@ -120,75 +125,96 @@ int travelingSalesmanProblem(int visitedNode, int currentNode) {
 
 //adding data set in to vector then called to travelingSalesmanProblem method
 void fillGraphVector(string uvw_value_string) {
+
 	graphVector.clear();
 	graphVector.resize(vertices, std::vector<int>(vertices, 0));
+
 	std::istringstream f(uvw_value_string);
+
 	while (std::getline(f, uvw_value_string)) {
+
 		vector<int> result = splitStringToIntegerArray(uvw_value_string);
+
 		int u = result[0];
 		int v = result[1];
 		int w = result[2];
 
 		graphVector[u][v] = w;
 		graphVector[v][u] = w;
+
 	}
+
 	visited_all_node_value = initVisitedAllNodeValue();
+
 	final_cost = travelingSalesmanProblem(first_visited_count, first_node_val);
 
-		output_vector[output_Vector_Size_Count] = final_cost;
-		output_Vector_Size_Count++;
+	output_vector[output_Vector_Size_Count] = final_cost;
+	output_Vector_Size_Count++;
+
 }
 
-//this method will convert string to vector array
-//main method to start the program,
+//main method for program to start
 //reading data from the first argument and writing result in a file with the same path.
 int main(int argument, char** argumentArray) {
+
 	std::string inputFileName = argumentArray[1];
-	std::string outputFileName = argumentArray[2];
+	std::string outPutFileName = argumentArray[2];
+
 	std::ifstream file(argumentArray[1]);
-	std::ofstream resultFileData;
+	ofstream resultFileData;
 	std::string str_line;
 	std::string file_data_String;
 	std::string uvw_value_string;
 	while (std::getline(file, str_line)) {
 		file_data_String += str_line;
 		file_data_String.push_back('\n');
+
 	}
+
 	std::istringstream f(file_data_String);
 	std::string file_line_string;
 
 	int edges = 0;
 	int count = 0;
+
 	while (std::getline(f, file_line_string)) {
-		vector<int> result_vector = splitStringToIntegerArray(file_line_string);
-		if (result_vector.size() == 1) {
+
+		vector<int> result_vectore = splitStringToIntegerArray(
+				file_line_string);
+
+		if (result_vectore.size() == 1) {
 			output_vector.clear();
-			output_vector.resize(result_vector[0], 0);
-		} else if (result_vector.size() == 1) {
-			vertices = result_vector[0];
-			edges = result_vector[1];
+			output_vector.resize(result_vectore[0], 0);
+
+		} else if (result_vectore.size() == 2) {
+
+			vertices = result_vectore[0];
+			edges = result_vectore[1];
 			count = 0;
 			uvw_value_string.clear();
 
-		} else if (result_vector.size() = 3) {
+		} else if (result_vectore.size() == 3) {
+
 			uvw_value_string += file_line_string;
 			uvw_value_string.push_back('\n');
 			count++;
 			if (count == edges) {
 				fillGraphVector(uvw_value_string);
 			}
+
 		}
 
 	}
+
 	resultFileData.open(argumentArray[2]);
 
-		for (int i = 0; i < output_vector.size(); i++) {
-			resultFileData << output_vector[i];
-			resultFileData << "\n";
-		}
+	for (int i = 0; i < output_vector.size(); i++) {
+		resultFileData << output_vector[i];
+		resultFileData << "\n";
+	}
 
-		resultFileData.close();
+	resultFileData.close();
 
-		return 0;
-
+	return 0;
 }
+
